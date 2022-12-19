@@ -5,10 +5,27 @@
 
 #include "Matrix.h"
 #include "Lcd.h"
+#include "Buzzer.h"
 
-const int moveInterval = 70,
-          scorePerFood = 10,
-          initialSnekLenght = 3;
+struct config {
+  int moveInterval,
+      scorePerFood;
+  bool isReversed;
+};
+
+const config diffConfig[] = { { 270, 10, false },   // D0 - snek is happy and eats fruit
+                              { 200, 20, false },   // D1 - snek is fast boy
+                              { 270, 30, true },    // D2 - snek is slow but confused (changes direction when eating fruit)
+                              { 200, 40, true } };  // D3 - snek is fast and confused (changes direction when eating fruit)
+
+struct position {
+  int x, y;
+};
+
+const position initialSnek[] = { { 0, 2 }, { 0, 1 }, { 0, 0 } };
+position snek[matrixSize * matrixSize];
+
+const int initialSnekLenght = 3;
 
 const String difficultyText = "     Diff : ",
              scoreText = "Score : ",
@@ -16,18 +33,12 @@ const String difficultyText = "     Diff : ",
              reachedDif = "Reached diff ",
              newHighscoreText = "NEW HIGHSCORE!";
 
-struct position {
-  int x, y;
-};
-const position initialSnek[] = {{0, 2}, {0, 1}, {0, 0}};
-position snek[matrixSize * matrixSize];   
-
-int snekX, 
+int snekX,
     snekY,
     snekMovement,
     score,
     difficulty,
-    snekLength;     
+    snekLength;
 
 bool gameEndScreenChanged,
      initFood,
@@ -43,8 +54,8 @@ void gameSetup() {
 }
 
 void gameInit() {
-  for (int i=0; i<matrixSize; i++) {
-    for (int j=0; j<matrixSize; j++) {
+  for (int i = 0; i < matrixSize; i++) {
+    for (int j = 0; j < matrixSize; j++) {
       matrix[i][j] = 0;
     }
   }
@@ -53,16 +64,16 @@ void gameInit() {
   snekMovement = RIGHT;
   score = 0;
   difficulty = startDifficulty;
-  
+
   lastMoved = millis();
   lastDiffChange = millis();
   initFood = true;
 
   snekLength = initialSnekLenght;
-  for (int i=0; i<snekLength; i++) {
-    snek[i] = initialSnek[i];    
+  for (int i = 0; i < snekLength; i++) {
+    snek[i] = initialSnek[i];
     matrix[snek[i].x][snek[i].y] = 1;
-  }  
+  }
   snekX = snek[0].x;
   snekY = snek[0].y;
 
@@ -71,22 +82,22 @@ void gameInit() {
 
 void doGameMovement() {
   switch (snekMovement) {
-    case UP: 
-      snekX --;  
+    case UP:
+      snekX--;
       break;
 
     case DOWN:
-      snekX ++;      
+      snekX++;
       break;
 
     case LEFT:
-      snekY --;
+      snekY--;
       break;
-    
+
     case RIGHT:
-      snekY ++;
+      snekY++;
       break;
-    
+
     default:
       break;
   }
@@ -94,41 +105,40 @@ void doGameMovement() {
   if (snekX >= 0 && snekX < matrixSize && snekY >= 0 && snekY < matrixSize) {
     matrixChanged = true;
     if (!changedLength) {
-      matrix[snek[snekLength-1].x][snek[snekLength-1].y] = 0; 
+      matrix[snek[snekLength - 1].x][snek[snekLength - 1].y] = 0;
     }
     changedLength = false;
-    for (int i=snekLength-1; i>=1; i--){
-      snek[i] = snek[i-1];                 
+    for (int i = snekLength - 1; i >= 1; i--) {
+      snek[i] = snek[i - 1];
     }
-    snek[0] = {snekX, snekY};
-    matrix[snekX][snekY] = 1;        
-  }  
+    snek[0] = { snekX, snekY };
+    matrix[snekX][snekY] = 1;
+  }
 }
 
 void updateGamePosition(int joystickMovement) {
   if (joystickMovement != NONE) {
     if ((snekMovement == UP || snekMovement == DOWN) && (joystickMovement == LEFT || joystickMovement == RIGHT)) {
-      snekMovement = joystickMovement;    
+      snekMovement = joystickMovement;
+    } else if ((snekMovement == LEFT || snekMovement == RIGHT) && (joystickMovement == UP || joystickMovement == DOWN)) {
+      snekMovement = joystickMovement;
     }
-    else if ((snekMovement == LEFT || snekMovement == RIGHT) && (joystickMovement == UP || joystickMovement == DOWN)) {
-      snekMovement = joystickMovement;    
-    }
-  } 
+  }
 }
 
 void changeGameLcd() {
   lcd.clear();
   lcd.setCursor(FIRST_ROW);
-  for (int i=0; i<nameSize; i++) {
+  for (int i = 0; i < nameSize; i++) {
     lcd.print(currentName[i]);
   }
 
   lcd.print(difficultyText);
   lcd.print(difficulty);
-  
+
   lcd.setCursor(SECOND_ROW);
   lcd.print(scoreText);
-  lcd.print(score);  
+  lcd.print(score);
 }
 
 void generateFood() {
@@ -139,10 +149,34 @@ void generateFood() {
 
   if (initFood == true || (snekX == currentFoodPosX && snekY == currentFoodPosY)) {
     if (!initFood) {
-      score += scorePerFood * difficulty;
-      snekLength ++;     
-      changedLength = true;       
-    }    
+      score += diffConfig[difficulty].scorePerFood;
+      snekLength++;
+      changedLength = true;
+      if (diffConfig[difficulty].isReversed) {
+        // 0 snekLength - 2
+        for (int i = 0; i <= (snekLength - 2) / 2; i++) {
+          position aux = snek[i];
+          snek[i] = snek[snekLength - 2 - i];
+          snek[snekLength - 2 - i] = aux;
+        }
+        if (snek[0].x == snek[1].x) {
+          if (snek[0].y < snek[1].y) {
+            snekMovement = LEFT;
+          } else {
+            snekMovement = RIGHT;
+          }
+        } else {
+          if (snek[0].x < snek[1].x) {
+            snekMovement = UP;
+          } else {
+            snekMovement = DOWN;
+          }
+        }
+        snekX = snek[0].x;
+        snekY = snek[0].y;
+      }
+      beep();
+    }
     initFood = false;
     changeGameLcd();
 
@@ -151,12 +185,12 @@ void generateFood() {
 
     while (badPosition) {
       badPosition = false;
-      newFoodPosX = random(matrixSize-2)+1;
-      newFoodPosY = random(matrixSize-2)+1;
-      for (int i=0; i<snekLength; i++){
+      newFoodPosX = random(matrixSize - 2) + 1;
+      newFoodPosY = random(matrixSize - 2) + 1;
+      for (int i = 0; i < snekLength; i++) {
         if (snek[i].x == newFoodPosX && snek[i].y == newFoodPosY) {
           badPosition = true;
-          break;          
+          break;
         }
       }
     }
@@ -175,22 +209,26 @@ void generateFood() {
     matrix[currentFoodPosX][currentFoodPosY] = state;
 
     matrixChanged = true;
-  } 
+  }
 }
 
 void displayGame() {
+  // change difficulty
   if (millis() - lastDiffChange > diffChangeInterval) {
     lastDiffChange = millis();
     difficulty = min(difficulty + 1, MAX_DIFFICULTY);
+    changeGameLcd();
   }
-  if (millis() - lastMoved > moveInterval * (MAX_DIFFICULTY - difficulty + 1)) {
-    // game logic
+
+  // game logic
+  if (millis() - lastMoved > diffConfig[difficulty].moveInterval) {
     generateFood();
-    doGameMovement();   
+    doGameMovement();
     lastMoved = millis();
   }
+
+  // martix display logic
   if (matrixChanged == true) {
-    // matrix display logic
     updateMatrix();
     matrixChanged = false;
   }
@@ -211,33 +249,33 @@ void displayGameEnd() {
     lcd.print("!");
 
     delay(endDelay);
-      
+
     lcd.clear();
     lcd.setCursor(FIRST_ROW);
     lcd.print(scoreText);
-    lcd.print(score);     
+    lcd.print(score);
     if (score > highscorePoints[0]) {
       lcd.setCursor(SECOND_ROW);
       lcd.print(newHighscoreText);
     }
 
-    for (int i=0; i<highscoreCount; i++) {
+    for (int i = 0; i < highscoreCount; i++) {
       if (score > highscorePoints[i]) {
-        for (int j=highscoreCount-1; j>=i+1; j--) {
-          highscorePoints[j] = highscorePoints[j-1];
-          for (int k=0; k<nameSize; k++) {
-            highscoreNames[j][k] = highscoreNames[j-1][k];     
+        for (int j = highscoreCount - 1; j >= i + 1; j--) {
+          highscorePoints[j] = highscorePoints[j - 1];
+          for (int k = 0; k < nameSize; k++) {
+            highscoreNames[j][k] = highscoreNames[j - 1][k];
           }
         }
         highscorePoints[i] = score;
-        for (int k=0; k<nameSize; k++) {
-          highscoreNames[i][k] = currentName[k];     
+        for (int k = 0; k < nameSize; k++) {
+          highscoreNames[i][k] = currentName[k];
         }
-        break;        
+        break;
       }
-    } 
+    }
 
-    saveHighscores();   
+    saveHighscores();
   }
 }
 

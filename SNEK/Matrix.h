@@ -4,7 +4,7 @@
 #define SNEK_MATRIX_H
 
 #include <LedControl.h>
-#include "Memory.h";
+#include "Memory.h"
 
 const uint64_t matrixImageSmile = 0x003c420000226600,
                matrixImageMenu = 0xc3c3c3dbffe7c381,
@@ -18,28 +18,28 @@ const int dinPin = 12,
           clockPin = 11,
           loadPin = 10;
 
-LedControl lc = LedControl(dinPin, clockPin, loadPin, 1); // DIN, CLK, LOAD, No. DRIVER
+LedControl lc = LedControl(dinPin, clockPin, loadPin, 1);  // DIN, CLK, LOAD, No. DRIVER
 
 const byte matrixSize = 8;
 
 bool matrixChanged = true;
 
 byte matrix[matrixSize][matrixSize] = {
-  {0, 0, 0, 0, 0, 0, 0, 0},
-  {0, 0, 0, 0, 0, 0, 0, 0},
-  {0, 0, 0, 0, 0, 0, 0, 0},
-  {0, 0, 0, 0, 0, 0, 0, 0},
-  {0, 0, 0, 0, 0, 0, 0, 0},
-  {0, 0, 0, 0, 0, 0, 0, 0},
-  {0, 0, 0, 0, 0, 0, 0, 0},
-  {0, 0, 0, 0, 0, 0, 0, 0}  
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 },
+  { 0, 0, 0, 0, 0, 0, 0, 0 }
 };
 
 void matrixSetup() {
   // the zero refers to the MAX7219 number, it is zero for 1 chip
-  lc.shutdown(0, false); // turn off power saving, enables display
-  lc.setIntensity(0, matrixBrightness); // sets brightness (0~15 possible values)
-  lc.clearDisplay(0);// clear screen
+  lc.shutdown(0, false);                 // turn off power saving, enables display
+  lc.setIntensity(0, matrixBrightness);  // sets brightness (0~15 possible values)
+  lc.clearDisplay(0);                    // clear screen
 }
 
 void updateMatrix() {

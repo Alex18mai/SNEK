@@ -5,16 +5,16 @@
 
 #include <LiquidCrystal.h>
 
-#define FIRST_ROW 0,0
-#define SECOND_ROW 0,1
+#define FIRST_ROW 0, 0
+#define SECOND_ROW 0, 1
 
 #define LCD_ARROW_UP int(0)
 #define LCD_ARROW_DOWN int(1)
 
-#define ARROW_UP_POSITION 15,0
-#define ARROW_DOWN_POSITION 15,1
+#define ARROW_UP_POSITION 15, 0
+#define ARROW_DOWN_POSITION 15, 1
 
-#define SCORE_POSITION 5,1
+#define SCORE_POSITION 5, 1
 
 const byte rs = 9,
            en = 8,
@@ -51,10 +51,10 @@ byte lcdMaskArrowDown[] = {
 void lcdSetup() {
   lcd.begin(16, 2);
   lcd.clear();
-  analogWrite(lcdBacklight, lcdBrightness * LCD_BRIGHT_FACTOR); 
+  analogWrite(lcdBacklight, lcdBrightness * LCD_BRIGHT_FACTOR);
 
   lcd.createChar(LCD_ARROW_UP, lcdMaskArrowUp);
-  lcd.createChar(LCD_ARROW_DOWN, lcdMaskArrowDown); 
+  lcd.createChar(LCD_ARROW_DOWN, lcdMaskArrowDown);
 }
 
 #endif

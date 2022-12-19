@@ -13,16 +13,16 @@ const int menuItemCount = 5,
           aboutTextCount = 3,
           howToPlayTextCount = 4;
 
-const int menuItemState[] = {STATE_GAME, STATE_MENU_HIGHSCORE, STATE_MENU_SETTINGS, STATE_MENU_ABOUT, STATE_MENU_HOW_TO_PLAY},
-          settingsItemState[] = {STATE_SETTINGS_CHANGE_NAME, STATE_SETTINGS_DIFFICULTY, STATE_SETTINGS_LCD_BRIGHT, STATE_SETTINGS_MATRIX_BRIGHT, STATE_SETTINGS_SOUND, STATE_SETTINGS_RESET_HIGHSCORE};
+const int menuItemState[] = { STATE_GAME, STATE_MENU_HIGHSCORE, STATE_MENU_SETTINGS, STATE_MENU_ABOUT, STATE_MENU_HOW_TO_PLAY },
+          settingsItemState[] = { STATE_SETTINGS_CHANGE_NAME, STATE_SETTINGS_DIFFICULTY, STATE_SETTINGS_LCD_BRIGHT, STATE_SETTINGS_MATRIX_BRIGHT, STATE_SETTINGS_SOUND, STATE_SETTINGS_RESET_HIGHSCORE };
 
 const String greetingsText = "Welcome to SNEK!",
              menuText = "MENU",
-             menuItemText[] = {"Start Game", "Highscores", "Settings", "About", "How To Play"},
-             settingsItemText[] = {"Change Name", "Difficulty", "LCD Bright", "Matrix Bright", "Sound", "Reset Highscore"},
-             aboutText[] = {"SNEK", "by Alex Enache", "github Alex18mai"},
-             howToPlayText[] = {"> u are SNEK", "> u eat fruit", "> u grow and", "change direction"},
-             soundText[] = {"OFF", "ON"};
+             menuItemText[] = { "Start Game", "Highscores", "Settings", "About", "How To Play" },
+             settingsItemText[] = { "Change Name", "Difficulty", "LCD Bright", "Matrix Bright", "Sound", "Reset Highscore" },
+             aboutText[] = { "SNEK", "by Alex Enache", "github Alex18mai" },
+             howToPlayText[] = { "> u are SNEK", "> u eat fruit", "> u grow and", "change direction" },
+             soundText[] = { "OFF", "ON" };
 
 const long greetingsTime = 3000;
 
@@ -36,13 +36,13 @@ volatile int currentItem,
 volatile long greetingsStart = 0;
 
 volatile bool lockedNameLetter,
-              menuChanged = true;
+              menuChanged = false;
 
 void menuSetup() {
   currentItem = 0;
   currentHighscore = 0;
   currentAbout = 0;
-  currentHowToPlay = 0;  
+  currentHowToPlay = 0;
   currentSettings = 0;
   currentNameLetter = 0;
   lockedNameLetter = false;
@@ -59,15 +59,15 @@ void displayGreetings() {
 }
 
 void putArrows(int currentPos, int minPos, int maxPos) {
-  if (currentPos > minPos) {  
-      lcd.setCursor(ARROW_UP_POSITION);
-      lcd.write(LCD_ARROW_UP);
-    } 
+  if (currentPos > minPos) {
+    lcd.setCursor(ARROW_UP_POSITION);
+    lcd.write(LCD_ARROW_UP);
+  }
 
-    if (currentPos < maxPos) {
-      lcd.setCursor(ARROW_DOWN_POSITION);
-      lcd.write(LCD_ARROW_DOWN);            
-    }  
+  if (currentPos < maxPos) {
+    lcd.setCursor(ARROW_DOWN_POSITION);
+    lcd.write(LCD_ARROW_DOWN);
+  }
 }
 
 void displayMenu() {
@@ -77,7 +77,7 @@ void displayMenu() {
 
     lcd.clear();
     lcd.setCursor(FIRST_ROW);
-    lcd.print(menuText);  
+    lcd.print(menuText);
 
     lcd.setCursor(SECOND_ROW);
     lcd.print(menuItemText[currentItem]);
@@ -95,15 +95,15 @@ void displayHighscore() {
     lcd.setCursor(FIRST_ROW);
     lcd.print(menuItemText[currentItem]);
 
-    lcd.setCursor(SECOND_ROW);    
-    for (int i=0; i<nameSize; i++) {
+    lcd.setCursor(SECOND_ROW);
+    for (int i = 0; i < nameSize; i++) {
       lcd.print(highscoreNames[currentHighscore][i]);
     }
 
     lcd.setCursor(SCORE_POSITION);
     lcd.print(highscorePoints[currentHighscore]);
-  
-    putArrows(currentHighscore, 0, highscoreCount - 1); 
+
+    putArrows(currentHighscore, 0, highscoreCount - 1);
   }
 }
 
@@ -135,7 +135,7 @@ void displayAbout() {
     lcd.setCursor(SECOND_ROW);
     lcd.print(aboutText[currentAbout]);
 
-    putArrows(currentAbout, 0, aboutTextCount - 1);  
+    putArrows(currentAbout, 0, aboutTextCount - 1);
   }
 }
 
@@ -151,7 +151,7 @@ void displayHowToPlay() {
     lcd.setCursor(SECOND_ROW);
     lcd.print(howToPlayText[currentHowToPlay]);
 
-    putArrows(currentHowToPlay, 0, howToPlayTextCount - 1);  
+    putArrows(currentHowToPlay, 0, howToPlayTextCount - 1);
   }
 }
 
@@ -161,18 +161,17 @@ void displaySettingsChangeName() {
 
     lcd.clear();
 
-    lcd.setCursor(FIRST_ROW);    
-    for (int i=0; i<nameSize; i++) {
+    lcd.setCursor(FIRST_ROW);
+    for (int i = 0; i < nameSize; i++) {
       lcd.print(currentName[i]);
     }
 
     lcd.setCursor(currentNameLetter, 1);
     if (!lockedNameLetter) {
       lcd.print('^');
-    }    
-    else{
-      lcd.write(LCD_ARROW_UP); 
-      putArrows(currentName[currentNameLetter], 'A', 'Z');       
+    } else {
+      lcd.write(LCD_ARROW_UP);
+      putArrows(currentName[currentNameLetter], 'A', 'Z');
     }
 
     saveSettings();
@@ -189,10 +188,10 @@ void displaySettingsDifficulty() {
 
     lcd.setCursor(SECOND_ROW);
     lcd.print(startDifficulty);
-    
+
     saveSettings();
 
-    putArrows(startDifficulty, MIN_DIFFICULTY, MAX_DIFFICULTY);  
+    putArrows(startDifficulty, MIN_DIFFICULTY, MAX_DIFFICULTY);
   }
 }
 
@@ -207,10 +206,10 @@ void displaySettingsLcdBright() {
     lcd.setCursor(SECOND_ROW);
     lcd.print(lcdBrightness);
 
-    analogWrite(lcdBacklight, lcdBrightness * LCD_BRIGHT_FACTOR);  
+    analogWrite(lcdBacklight, lcdBrightness * LCD_BRIGHT_FACTOR);
     saveSettings();
 
-    putArrows(lcdBrightness, MIN_LCD_BRIGHT, MAX_LCD_BRIGHT); 
+    putArrows(lcdBrightness, MIN_LCD_BRIGHT, MAX_LCD_BRIGHT);
   }
 }
 
@@ -228,7 +227,7 @@ void displaySettingsMatrixBright() {
     lc.setIntensity(0, matrixBrightness);
     saveSettings();
 
-    putArrows(matrixBrightness, MIN_MATRIX_BRIGHT, MAX_MATRIX_BRIGHT); 
+    putArrows(matrixBrightness, MIN_MATRIX_BRIGHT, MAX_MATRIX_BRIGHT);
   }
 }
 
@@ -244,8 +243,8 @@ void displaySettingsSound() {
     lcd.print(soundText[soundSetting]);
 
     saveSettings();
-    
-    putArrows(soundSetting, NO_SOUND, WITH_SOUND); 
+
+    putArrows(soundSetting, NO_SOUND, WITH_SOUND);
   }
 }
 

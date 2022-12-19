@@ -15,9 +15,9 @@
 #define BUTTON_CLICK 1
 
 // declare all the joystick pins
-const int pinSW = 2, // digital pin connected to switch output
-          pinX = A0, // A0 - analog pin connected to X output
-          pinY = A1; // A1 - analog pin connected to Y output
+const int pinSW = 2,  // digital pin connected to switch output
+          pinX = A0,  // A0 - analog pin connected to X output
+          pinY = A1;  // A1 - analog pin connected to Y output
 
 // constants for the minimum and maximum thresholds for the joystick + median value
 const int minThreshold = 300,
@@ -25,7 +25,7 @@ const int minThreshold = 300,
           medianValue = 516;
 
 // delay for debounce
-const unsigned long debounceDelay = 50;          
+const unsigned long debounceDelay = 50;
 
 // setup
 void joystickSetup() {
@@ -37,7 +37,7 @@ void joystickSetup() {
 int checkSwitchAction() {
   static int lastSwitchValue = HIGH, switchState = HIGH;
   static unsigned long lastSwitchDebounceTime = 0;
-  
+
   int switchValue = digitalRead(pinSW);
 
   if (switchValue != lastSwitchValue) {
@@ -64,7 +64,7 @@ int checkJoystickMovement() {
   static int joystickDebounceState = NONE;
   static unsigned long lastJoystickDebounceTime = 0;
   static unsigned long debounceDelayJoystick = 15;
-  
+
   int xValue = analogRead(pinX);
   int yValue = analogRead(pinY);
   // Serial.println(xValue + semicolon + yValue);
@@ -79,7 +79,7 @@ int checkJoystickMovement() {
   lastYValue = yValue;
 
   if (joystickDebounceState == NONE) {
-    if (abs(xValue - medianValue) > abs(yValue - medianValue)) { // the X coordinate has a bigger change
+    if (abs(xValue - medianValue) > abs(yValue - medianValue)) {  // the X coordinate has a bigger change
       if (xValue < minThreshold) {
         joystickDebounceState = UP;
         return UP;
@@ -88,8 +88,7 @@ int checkJoystickMovement() {
         joystickDebounceState = DOWN;
         return DOWN;
       }
-    }
-    else { // the Y coordinate has a bigger change
+    } else {  // the Y coordinate has a bigger change
       if (yValue < minThreshold) {
         joystickDebounceState = RIGHT;
         return RIGHT;
@@ -101,7 +100,7 @@ int checkJoystickMovement() {
     }
   }
 
-  return NONE;  
+  return NONE;
 }
 
 #endif

@@ -7,6 +7,7 @@
 #include "Memory.h"
 #include "Joystick.h"
 #include "Game.h"
+#include "Buzzer.h"
 
 volatile int currentState;
 
@@ -56,11 +57,11 @@ void manageCurrentState() {
       scrollItems(joystickMovement, currentItem, 0, menuItemCount - 1);
       if (switchAction == BUTTON_CLICK) {
         currentState = menuItemState[currentItem];
-        menuChanged = true;
 
         if (currentState == STATE_GAME) {
           gameInit();
         } else {
+          menuChanged = true;
           currentHighscore = 0;
           currentAbout = 0;
           currentHowToPlay = 0;
@@ -123,6 +124,7 @@ void manageCurrentState() {
     case STATE_GAME_END:
       if (switchAction == BUTTON_CLICK) {
         currentState = STATE_MENU;
+        menuChanged = true;
       }
       break;
 
@@ -182,6 +184,10 @@ void manageCurrentState() {
 
     default:
       break;
+  }
+
+  if (menuChanged) {
+    beep();
   }
 }
 

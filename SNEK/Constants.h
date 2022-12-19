@@ -5,7 +5,7 @@
 
 /* ---------- states ---------- */
 
-#define STATE_GREETINGS 0 
+#define STATE_GREETINGS 0
 
 #define STATE_MENU 1
 #define STATE_MENU_HIGHSCORE 2
@@ -27,7 +27,7 @@
 
 /* ---------- bounds ---------- */
 
-#define MIN_DIFFICULTY 1
+#define MIN_DIFFICULTY 0
 #define MAX_DIFFICULTY 3
 
 #define MIN_LCD_BRIGHT 1

@@ -24,15 +24,15 @@ volatile int startDifficulty,
 
 void readHighscores() {
   int address = highscoreStartingAddress;
-  
-  for (int i=0; i<highscoreCount; i++) {
-    for (int j=0; j<nameSize; j++) {
+
+  for (int i = 0; i < highscoreCount; i++) {
+    for (int j = 0; j < nameSize; j++) {
       EEPROM.get(address, highscoreNames[i][j]);
       address += sizeof(char);
     }
   }
-  
-  for (int i=0; i<highscoreCount; i++) {
+
+  for (int i = 0; i < highscoreCount; i++) {
     EEPROM.get(address, highscorePoints[i]);
     address += sizeof(int);
   }
@@ -41,11 +41,11 @@ void readHighscores() {
 void readSettings() {
   int address = settingsStartingAddress;
 
-  for (int i=0; i<nameSize; i++) {
+  for (int i = 0; i < nameSize; i++) {
     EEPROM.get(address, currentName[i]);
     address += sizeof(char);
   }
-  
+
   EEPROM.get(address, startDifficulty);
   address += sizeof(int);
 
@@ -61,15 +61,15 @@ void readSettings() {
 
 void initHighscores() {
   int address = highscoreStartingAddress;
-  
-  for (int i=0; i<highscoreCount; i++) {
-    for (int j=0; j<nameSize; j++) {
+
+  for (int i = 0; i < highscoreCount; i++) {
+    for (int j = 0; j < nameSize; j++) {
       EEPROM.put(address, char('A'));
       address += sizeof(char);
     }
   }
-  
-  for (int i=0; i<highscoreCount; i++) {
+
+  for (int i = 0; i < highscoreCount; i++) {
     EEPROM.put(address, 0);
     address += sizeof(int);
   }
@@ -78,11 +78,11 @@ void initHighscores() {
 void initSettings() {
   int address = settingsStartingAddress;
 
-  for (int i=0; i<nameSize; i++) {
+  for (int i = 0; i < nameSize; i++) {
     EEPROM.put(address, 'A');
     address += sizeof(char);
   }
-  
+
   EEPROM.put(address, MIN_DIFFICULTY);
   address += sizeof(int);
 
@@ -107,15 +107,15 @@ void memorySetup() {
 
 void saveHighscores() {
   int address = highscoreStartingAddress;
-  
-  for (int i=0; i<highscoreCount; i++) {
-    for (int j=0; j<nameSize; j++) {
+
+  for (int i = 0; i < highscoreCount; i++) {
+    for (int j = 0; j < nameSize; j++) {
       EEPROM.put(address, highscoreNames[i][j]);
       address += sizeof(char);
     }
   }
-  
-  for (int i=0; i<highscoreCount; i++) {
+
+  for (int i = 0; i < highscoreCount; i++) {
     EEPROM.put(address, highscorePoints[i]);
     address += sizeof(int);
   }
@@ -124,11 +124,11 @@ void saveHighscores() {
 void saveSettings() {
   int address = settingsStartingAddress;
 
-  for (int i=0; i<nameSize; i++) {
+  for (int i = 0; i < nameSize; i++) {
     EEPROM.put(address, currentName[i]);
     address += sizeof(char);
   }
-  
+
   EEPROM.put(address, startDifficulty);
   address += sizeof(int);
 
