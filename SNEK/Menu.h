@@ -51,7 +51,7 @@ void menuSetup() {
 
 void displayGreetings() {
   if (greetingsStart == 0) {
-    greetingsStart = myMillis();
+    greetingsStart = millisWithoutPause();
     displayMatrixImage(matrixImageSmile);
     lcd.clear();
     lcd.setCursor(FIRST_ROW);

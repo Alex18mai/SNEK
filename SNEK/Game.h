@@ -66,8 +66,8 @@ void gameInit() {
   score = 0;
   difficulty = startDifficulty;
 
-  lastMoved = myMillis();
-  lastDiffChange = myMillis();
+  lastMoved = millisWithoutPause();
+  lastDiffChange = millisWithoutPause();
   initFood = true;
 
   snekLength = initialSnekLenght;
@@ -209,9 +209,9 @@ void generateFood() {
     matrixChanged = true;
   }
 
-  if (myMillis() - lastBlink > blinkDelay) {
+  if (millisWithoutPause() - lastBlink > blinkDelay) {
     state = !state;
-    lastBlink = myMillis();
+    lastBlink = millisWithoutPause();
     matrix[currentFoodPosX][currentFoodPosY] = state;
 
     matrixChanged = true;
@@ -220,17 +220,17 @@ void generateFood() {
 
 void displayGame() {
   // change difficulty
-  if (myMillis() - lastDiffChange > diffChangeInterval) {
-    lastDiffChange = myMillis();
+  if (millisWithoutPause() - lastDiffChange > diffChangeInterval) {
+    lastDiffChange = millisWithoutPause();
     difficulty = min(difficulty + 1, MAX_DIFFICULTY);
     changeGameLcd();
   }
 
   // game logic
-  if (myMillis() - lastMoved > diffConfig[difficulty].moveInterval) {
+  if (millisWithoutPause() - lastMoved > diffConfig[difficulty].moveInterval) {
     generateFood();
     doGameMovement();
-    lastMoved = myMillis();
+    lastMoved = millisWithoutPause();
   }
 
   // martix display logic

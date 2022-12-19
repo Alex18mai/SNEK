@@ -11,7 +11,7 @@ void timeSetup() {
   pauseStart = 0;
 }
 
-unsigned long myMillis() {
+unsigned long millisWithoutPause() {
   return millis() - timePaused;
 }
 

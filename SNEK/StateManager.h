@@ -47,7 +47,7 @@ void manageCurrentState() {
 
   switch (currentState) {
     case STATE_GREETINGS:
-      if (myMillis() - greetingsStart > greetingsTime) {
+      if (millisWithoutPause() - greetingsStart > greetingsTime) {
         currentState = STATE_MENU;
         currentItem = 0;
         menuChanged = true;
