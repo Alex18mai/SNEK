@@ -6,8 +6,9 @@
 #include "Matrix.h"
 #include "Lcd.h"
 
-const int moveInterval = 100,
-          scorePerFood = 10;
+const int moveInterval = 70,
+          scorePerFood = 10,
+          initialSnekLenght = 3;
 
 const String difficultyText = "     Diff : ",
              scoreText = "Score : ",
@@ -15,14 +16,22 @@ const String difficultyText = "     Diff : ",
              reachedDif = "Reached diff ",
              newHighscoreText = "NEW HIGHSCORE!";
 
+struct position {
+  int x, y;
+};
+const position initialSnek[] = {{0, 2}, {0, 1}, {0, 0}};
+position snek[matrixSize * matrixSize];   
+
 int snekX, 
     snekY,
     snekMovement,
     score,
-    difficulty;
+    difficulty,
+    snekLength;     
 
 bool gameEndScreenChanged,
-     initFood;
+     initFood,
+     changedLength;
 
 unsigned long lastMoved,
               lastDiffChange,
@@ -41,21 +50,26 @@ void gameInit() {
   }
 
   matrixChanged = true;
-  snekX = 0;
-  snekY = 0;
   snekMovement = RIGHT;
   score = 0;
   difficulty = startDifficulty;
+  
   lastMoved = millis();
   lastDiffChange = millis();
-  matrix[snekX][snekY] = 1;
   initFood = true;
+
+  snekLength = initialSnekLenght;
+  for (int i=0; i<snekLength; i++) {
+    snek[i] = initialSnek[i];    
+    matrix[snek[i].x][snek[i].y] = 1;
+  }  
+  snekX = snek[0].x;
+  snekY = snek[0].y;
+
+  changedLength = false;
 }
 
 void doGameMovement() {
-  int lastSnekX = snekX;
-  int lastSnekY = snekY;
-
   switch (snekMovement) {
     case UP: 
       snekX --;  
@@ -79,8 +93,15 @@ void doGameMovement() {
 
   if (snekX >= 0 && snekX < matrixSize && snekY >= 0 && snekY < matrixSize) {
     matrixChanged = true;
-    matrix[lastSnekX][lastSnekY] = 0;
-    matrix[snekX][snekY] = 1;    
+    if (!changedLength) {
+      matrix[snek[snekLength-1].x][snek[snekLength-1].y] = 0; 
+    }
+    changedLength = false;
+    for (int i=snekLength-1; i>=1; i--){
+      snek[i] = snek[i-1];                 
+    }
+    snek[0] = {snekX, snekY};
+    matrix[snekX][snekY] = 1;        
   }  
 }
 
@@ -112,19 +133,33 @@ void changeGameLcd() {
 
 void generateFood() {
   static unsigned long lastBlink = 0;
-  static const int blinkDelay = 200;
+  static const int blinkDelay = 100;
   static int state = HIGH;
   static int currentFoodPosX, currentFoodPosY;
 
   if (initFood == true || (snekX == currentFoodPosX && snekY == currentFoodPosY)) {
     if (!initFood) {
       score += scorePerFood * difficulty;
+      snekLength ++;     
+      changedLength = true;       
     }    
     initFood = false;
     changeGameLcd();
 
-    int newFoodPosX = random(matrixSize);
-    int newFoodPosY = random(matrixSize);
+    int newFoodPosX, newFoodPosY;
+    bool badPosition = true;
+
+    while (badPosition) {
+      badPosition = false;
+      newFoodPosX = random(matrixSize-2)+1;
+      newFoodPosY = random(matrixSize-2)+1;
+      for (int i=0; i<snekLength; i++){
+        if (snek[i].x == newFoodPosX && snek[i].y == newFoodPosY) {
+          badPosition = true;
+          break;          
+        }
+      }
+    }
 
     matrix[newFoodPosX][newFoodPosY] = state;
 
@@ -150,10 +185,10 @@ void displayGame() {
   }
   if (millis() - lastMoved > moveInterval * (MAX_DIFFICULTY - difficulty + 1)) {
     // game logic
-    doGameMovement();        
+    generateFood();
+    doGameMovement();   
     lastMoved = millis();
   }
-  generateFood();
   if (matrixChanged == true) {
     // matrix display logic
     updateMatrix();

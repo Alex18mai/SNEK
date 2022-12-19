@@ -10,15 +10,15 @@ const int buzzer = 3,
           buzzerTime = 500;
 
 void buzzerSetup() {
-  pinMode(buzzer, OUTPUT);
+  //pinMode(buzzer, OUTPUT);
 }
 
 void playSong() {
   if (soundSetting == NO_SOUND) {
-    noTone(buzzer);
+    //noTone(buzzer);
   }
   else{
-    tone(buzzer, buzzerSound, buzzerTime);
+    //tone(buzzer, buzzerSound, buzzerTime);
   }
 }
 

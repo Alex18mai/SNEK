@@ -49,12 +49,12 @@ byte lcdMaskArrowDown[] = {
 };
 
 void lcdSetup() {
-  analogWrite(lcdBacklight, lcdBrightness * LCD_BRIGHT_FACTOR);  
   lcd.begin(16, 2);
   lcd.clear();
+  analogWrite(lcdBacklight, lcdBrightness * LCD_BRIGHT_FACTOR); 
 
   lcd.createChar(LCD_ARROW_UP, lcdMaskArrowUp);
-  lcd.createChar(LCD_ARROW_DOWN, lcdMaskArrowDown);
+  lcd.createChar(LCD_ARROW_DOWN, lcdMaskArrowDown); 
 }
 
 #endif

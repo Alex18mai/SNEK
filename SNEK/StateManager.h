@@ -17,26 +17,26 @@ void stateSetup() {
 void returnToMenu(int joystickMovement) {
   if (joystickMovement == LEFT) {
     currentState = STATE_MENU;
-    menuChanged = true; 
-  } 
+    menuChanged = true;
+  }
 }
 
 void returnToSettings(int joystickMovement) {
   if (joystickMovement == LEFT) {
     currentState = STATE_MENU_SETTINGS;
-    menuChanged = true; 
-  } 
+    menuChanged = true;
+  }
 }
 
 void scrollItems(int joystickMovement, volatile int &counter, int minPos, int maxPos) {
   if (joystickMovement == UP && counter > minPos) {
-    counter --;        
-    menuChanged = true;     
-  }               
+    counter--;
+    menuChanged = true;
+  }
   if (joystickMovement == DOWN && counter < maxPos) {
-    counter ++;         
-    menuChanged = true;    
-  }  
+    counter++;
+    menuChanged = true;
+  }
 }
 
 void manageCurrentState() {
@@ -44,12 +44,12 @@ void manageCurrentState() {
   int switchAction = checkSwitchAction();
 
   switch (currentState) {
-    case STATE_GREETINGS: 
+    case STATE_GREETINGS:
       if (millis() - greetingsStart > greetingsTime) {
-        currentState = STATE_MENU; 
+        currentState = STATE_MENU;
         currentItem = 0;
-        menuChanged = true;   
-      }               
+        menuChanged = true;
+      }
       break;
 
     case STATE_MENU:
@@ -57,184 +57,191 @@ void manageCurrentState() {
       if (switchAction == BUTTON_CLICK) {
         currentState = menuItemState[currentItem];
         menuChanged = true;
-        
+
         if (currentState == STATE_GAME) {
           gameInit();
-        }
-        else{
+        } else {
           currentHighscore = 0;
           currentAbout = 0;
-          currentHowToPlay = 0;  
+          currentHowToPlay = 0;
           currentSettings = 0;
         }
-      }      
+      }
       break;
 
-    case STATE_MENU_HIGHSCORE:    
+    case STATE_MENU_HIGHSCORE:
       scrollItems(joystickMovement, currentHighscore, 0, highscoreCount - 1);
-      returnToMenu(joystickMovement);  
+      returnToMenu(joystickMovement);
       break;
-      
-    case STATE_MENU_SETTINGS:  
+
+    case STATE_MENU_SETTINGS:
       scrollItems(joystickMovement, currentSettings, 0, settingsItemCount - 1);
-      returnToMenu(joystickMovement);   
+      returnToMenu(joystickMovement);
       if (switchAction == BUTTON_CLICK) {
         if (settingsItemState[currentSettings] == STATE_SETTINGS_RESET_HIGHSCORE) {
           initHighscores();
           readHighscores();
-        }
-        else {
+        } else {
           currentState = settingsItemState[currentSettings];
           menuChanged = true;
+          if (currentState == STATE_SETTINGS_CHANGE_NAME) {
+            currentNameLetter = 0;
+            lockedNameLetter = false;
+          }
         }
-      }                            
-      break;
-    
-    case STATE_MENU_ABOUT:    
-      scrollItems(joystickMovement, currentAbout, 0, aboutTextCount - 1);   
-      returnToMenu(joystickMovement);                 
-      break;
-    
-    case STATE_MENU_HOW_TO_PLAY: 
-      scrollItems(joystickMovement, currentHowToPlay, 0, howToPlayTextCount - 1);
-      returnToMenu(joystickMovement);               
-      break;
-    
-    case STATE_GAME:   
-      updateGamePosition(joystickMovement);   
-      if (!(snekX >= 0 && snekX < matrixSize && snekY >= 0 && snekY < matrixSize)) {
-        currentState = STATE_GAME_END;    
-        gameEndScreenChanged = true;
-        if (currentState == STATE_SETTINGS_CHANGE_NAME) {
-          currentNameLetter = 0;   
-          lockedNameLetter = false;       
-        }
-      }            
+      }
       break;
 
-    case STATE_GAME_END:     
+    case STATE_MENU_ABOUT:
+      scrollItems(joystickMovement, currentAbout, 0, aboutTextCount - 1);
+      returnToMenu(joystickMovement);
+      break;
+
+    case STATE_MENU_HOW_TO_PLAY:
+      scrollItems(joystickMovement, currentHowToPlay, 0, howToPlayTextCount - 1);
+      returnToMenu(joystickMovement);
+      break;
+
+    case STATE_GAME:
+      {
+        updateGamePosition(joystickMovement);
+
+        bool snekEatsTail = false;
+        for (int i = 1; i < snekLength; i++) {
+          if (snek[i].x == snekX && snek[i].y == snekY) {
+            snekEatsTail = true;
+          }
+        }
+
+        if (snekEatsTail || !(snekX >= 0 && snekX < matrixSize && snekY >= 0 && snekY < matrixSize)) {
+          currentState = STATE_GAME_END;
+          gameEndScreenChanged = true;
+        }
+        break;
+      }
+
+    case STATE_GAME_END:
       if (switchAction == BUTTON_CLICK) {
-        currentState = STATE_MENU;        
-      }           
+        currentState = STATE_MENU;
+      }
       break;
 
     case STATE_SETTINGS_CHANGE_NAME:
       if (!lockedNameLetter) {
         if (currentNameLetter == 0) {
           returnToSettings(joystickMovement);
-        } 
+        }
         if (joystickMovement == LEFT && currentNameLetter > 0) {
-          currentNameLetter --;        
-          menuChanged = true;     
-        }               
+          currentNameLetter--;
+          menuChanged = true;
+        }
         if (joystickMovement == RIGHT && currentNameLetter < nameSize - 1) {
-          currentNameLetter ++;         
-          menuChanged = true;    
-        }   
+          currentNameLetter++;
+          menuChanged = true;
+        }
         if (switchAction == BUTTON_CLICK) {
           lockedNameLetter = true;
           menuChanged = true;
-        }  
-      }
-      else {
+        }
+      } else {
         if (joystickMovement == UP && currentName[currentNameLetter] > 'A') {
-          currentName[currentNameLetter] --;        
-          menuChanged = true;     
-        }               
+          currentName[currentNameLetter]--;
+          menuChanged = true;
+        }
         if (joystickMovement == DOWN && currentName[currentNameLetter] < 'Z') {
-          currentName[currentNameLetter] ++;         
-          menuChanged = true;    
-        }  
+          currentName[currentNameLetter]++;
+          menuChanged = true;
+        }
         if (switchAction == BUTTON_CLICK) {
           lockedNameLetter = false;
           menuChanged = true;
-        } 
+        }
       }
-          
-      break;  
+
+      break;
 
     case STATE_SETTINGS_DIFFICULTY:
       scrollItems(joystickMovement, startDifficulty, MIN_DIFFICULTY, MAX_DIFFICULTY);
       returnToSettings(joystickMovement);
-      break;  
+      break;
 
     case STATE_SETTINGS_LCD_BRIGHT:
       scrollItems(joystickMovement, lcdBrightness, MIN_LCD_BRIGHT, MAX_LCD_BRIGHT);
       returnToSettings(joystickMovement);
-      break;  
+      break;
 
     case STATE_SETTINGS_MATRIX_BRIGHT:
       scrollItems(joystickMovement, matrixBrightness, MIN_MATRIX_BRIGHT, MAX_MATRIX_BRIGHT);
       returnToSettings(joystickMovement);
-      break;  
+      break;
 
     case STATE_SETTINGS_SOUND:
       scrollItems(joystickMovement, soundSetting, NO_SOUND, WITH_SOUND);
       returnToSettings(joystickMovement);
-      break; 
+      break;
 
     default:
       break;
-  }         
+  }
 }
 
 void executeCurrentState() {
-switch (currentState) {
-    case STATE_GREETINGS:    
-      displayGreetings();            
+  switch (currentState) {
+    case STATE_GREETINGS:
+      displayGreetings();
       break;
 
-    case STATE_MENU:  
-      displayMenu();              
+    case STATE_MENU:
+      displayMenu();
       break;
 
-    case STATE_MENU_HIGHSCORE:    
-      displayHighscore();            
+    case STATE_MENU_HIGHSCORE:
+      displayHighscore();
       break;
-      
-    case STATE_MENU_SETTINGS: 
-      displaySettings();               
+
+    case STATE_MENU_SETTINGS:
+      displaySettings();
       break;
-    
-    case STATE_MENU_ABOUT:                
+
+    case STATE_MENU_ABOUT:
       displayAbout();
       break;
-    
-    case STATE_MENU_HOW_TO_PLAY:                
+
+    case STATE_MENU_HOW_TO_PLAY:
       displayHowToPlay();
       break;
-    
-    case STATE_GAME: 
-      displayGame();               
+
+    case STATE_GAME:
+      displayGame();
       break;
 
-    case STATE_GAME_END: 
-      displayGameEnd();               
+    case STATE_GAME_END:
+      displayGameEnd();
       break;
-    
+
     case STATE_SETTINGS_CHANGE_NAME:
       displaySettingsChangeName();
-      break;  
+      break;
 
     case STATE_SETTINGS_DIFFICULTY:
       displaySettingsDifficulty();
-      break;  
+      break;
 
     case STATE_SETTINGS_LCD_BRIGHT:
       displaySettingsLcdBright();
-      break;  
+      break;
 
     case STATE_SETTINGS_MATRIX_BRIGHT:
       displaySettingsMatrixBright();
-      break;  
+      break;
 
     case STATE_SETTINGS_SOUND:
       displaySettingsSound();
-      break;  
-    
+      break;
+
     default:
       break;
-  }         
+  }
 }
 
 #endif
