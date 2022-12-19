@@ -10,11 +10,14 @@
 
 #define LCD_ARROW_UP int(0)
 #define LCD_ARROW_DOWN int(1)
+#define LCD_PAUSE int(2)
 
 #define ARROW_UP_POSITION 15, 0
 #define ARROW_DOWN_POSITION 15, 1
 
 #define SCORE_POSITION 5, 1
+
+#define PAUSE_POSITION 15, 1
 
 const byte rs = 9,
            en = 8,
@@ -48,6 +51,17 @@ byte lcdMaskArrowDown[] = {
   B00000
 };
 
+byte lcdPause[] = {
+  B00000,
+  B11011,
+  B11011,
+  B11011,
+  B11011,
+  B11011,
+  B11011,
+  B00000
+};
+
 void lcdSetup() {
   lcd.begin(16, 2);
   lcd.clear();
@@ -55,6 +69,7 @@ void lcdSetup() {
 
   lcd.createChar(LCD_ARROW_UP, lcdMaskArrowUp);
   lcd.createChar(LCD_ARROW_DOWN, lcdMaskArrowDown);
+  lcd.createChar(LCD_PAUSE, lcdPause);
 }
 
 #endif

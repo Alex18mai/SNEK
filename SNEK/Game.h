@@ -6,6 +6,7 @@
 #include "Matrix.h"
 #include "Lcd.h"
 #include "Buzzer.h"
+#include "Time.h"
 
 struct config {
   int moveInterval,
@@ -65,8 +66,8 @@ void gameInit() {
   score = 0;
   difficulty = startDifficulty;
 
-  lastMoved = millis();
-  lastDiffChange = millis();
+  lastMoved = myMillis();
+  lastDiffChange = myMillis();
   initFood = true;
 
   snekLength = initialSnekLenght;
@@ -139,6 +140,11 @@ void changeGameLcd() {
   lcd.setCursor(SECOND_ROW);
   lcd.print(scoreText);
   lcd.print(score);
+
+  if (pauseStart) {
+    lcd.setCursor(PAUSE_POSITION);
+    lcd.write(LCD_PAUSE);
+  }
 }
 
 void generateFood() {
@@ -203,9 +209,9 @@ void generateFood() {
     matrixChanged = true;
   }
 
-  if (millis() - lastBlink > blinkDelay) {
+  if (myMillis() - lastBlink > blinkDelay) {
     state = !state;
-    lastBlink = millis();
+    lastBlink = myMillis();
     matrix[currentFoodPosX][currentFoodPosY] = state;
 
     matrixChanged = true;
@@ -214,17 +220,17 @@ void generateFood() {
 
 void displayGame() {
   // change difficulty
-  if (millis() - lastDiffChange > diffChangeInterval) {
-    lastDiffChange = millis();
+  if (myMillis() - lastDiffChange > diffChangeInterval) {
+    lastDiffChange = myMillis();
     difficulty = min(difficulty + 1, MAX_DIFFICULTY);
     changeGameLcd();
   }
 
   // game logic
-  if (millis() - lastMoved > diffConfig[difficulty].moveInterval) {
+  if (myMillis() - lastMoved > diffConfig[difficulty].moveInterval) {
     generateFood();
     doGameMovement();
-    lastMoved = millis();
+    lastMoved = myMillis();
   }
 
   // martix display logic

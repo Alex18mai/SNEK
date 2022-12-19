@@ -13,14 +13,6 @@ void buzzerSetup() {
   pinMode(buzzer, OUTPUT);
 }
 
-void playSong() {
-  if (soundSetting == NO_SOUND) {
-    //noTone(buzzer);
-  } else {
-    //tone(buzzer, buzzerSound, buzzerTime);
-  }
-}
-
 void beep() {
   if (soundSetting == WITH_SOUND) {
     tone(buzzer, buzzerSound, buzzerTime);

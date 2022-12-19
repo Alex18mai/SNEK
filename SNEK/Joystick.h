@@ -41,11 +41,11 @@ int checkSwitchAction() {
   int switchValue = digitalRead(pinSW);
 
   if (switchValue != lastSwitchValue) {
-    lastSwitchDebounceTime = millis();
+    lastSwitchDebounceTime = myMillis();
   }
   lastSwitchValue = switchValue;
 
-  if (millis() - lastSwitchDebounceTime > debounceDelay) {
+  if (myMillis() - lastSwitchDebounceTime > debounceDelay) {
     if (switchValue != switchState) {
       switchState = switchValue;
 
@@ -69,9 +69,9 @@ int checkJoystickMovement() {
   int yValue = analogRead(pinY);
   // Serial.println(xValue + semicolon + yValue);
 
-  if (millis() - lastJoystickDebounceTime > debounceDelayJoystick && ((xValue < minThreshold || xValue > maxThreshold) || (yValue < minThreshold || yValue > maxThreshold))) {
+  if (myMillis() - lastJoystickDebounceTime > debounceDelayJoystick && ((xValue < minThreshold || xValue > maxThreshold) || (yValue < minThreshold || yValue > maxThreshold))) {
     if ((lastXValue >= minThreshold && lastXValue <= maxThreshold) && (lastYValue >= minThreshold && lastYValue <= maxThreshold)) {
-      lastJoystickDebounceTime = millis();
+      lastJoystickDebounceTime = myMillis();
       joystickDebounceState = NONE;
     }
   }

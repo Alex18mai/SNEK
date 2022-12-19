@@ -23,6 +23,8 @@
 #define STATE_SETTINGS_SOUND 12
 #define STATE_SETTINGS_RESET_HIGHSCORE 13
 
+#define STATE_PAUSED 14
+
 /* ---------- end states ---------- */
 
 /* ---------- bounds ---------- */

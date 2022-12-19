@@ -7,6 +7,7 @@
 #include "Matrix.h"
 #include "Lcd.h"
 #include "Memory.h"
+#include "Time.h"
 
 const int menuItemCount = 5,
           settingsItemCount = 6,
@@ -50,7 +51,7 @@ void menuSetup() {
 
 void displayGreetings() {
   if (greetingsStart == 0) {
-    greetingsStart = millis();
+    greetingsStart = myMillis();
     displayMatrixImage(matrixImageSmile);
     lcd.clear();
     lcd.setCursor(FIRST_ROW);

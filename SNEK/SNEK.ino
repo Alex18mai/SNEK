@@ -20,12 +20,12 @@ void setup() {
   gameSetup();
   stateSetup();
   buzzerSetup();
-
+  timeSetup();
+  
   Serial.begin(SERIAL_DATA_RATE);
 }
 
 void loop() {
   manageCurrentState();
   executeCurrentState();
-  playSong();
 }

@@ -8,6 +8,7 @@
 #include "Joystick.h"
 #include "Game.h"
 #include "Buzzer.h"
+#include "Time.h"
 
 volatile int currentState;
 
@@ -46,7 +47,7 @@ void manageCurrentState() {
 
   switch (currentState) {
     case STATE_GREETINGS:
-      if (millis() - greetingsStart > greetingsTime) {
+      if (myMillis() - greetingsStart > greetingsTime) {
         currentState = STATE_MENU;
         currentItem = 0;
         menuChanged = true;
@@ -105,6 +106,11 @@ void manageCurrentState() {
 
     case STATE_GAME:
       {
+        if (switchAction == BUTTON_CLICK) {        
+          currentState = STATE_PAUSED;
+          startPause();
+          changeGameLcd();
+        }
         updateGamePosition(joystickMovement);
 
         bool snekEatsTail = false;
@@ -181,6 +187,13 @@ void manageCurrentState() {
       scrollItems(joystickMovement, soundSetting, NO_SOUND, WITH_SOUND);
       returnToSettings(joystickMovement);
       break;
+    
+    case STATE_PAUSED:
+      if (switchAction == BUTTON_CLICK) {        
+        currentState = STATE_GAME;
+        endPause();
+        changeGameLcd();
+      }
 
     default:
       break;
