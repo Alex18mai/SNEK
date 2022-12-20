@@ -46,7 +46,7 @@ And most importantly, have fun!
 
 <details open><summary> <h2>Video</h2> </summary></br>
 
-[![Video](https://img.youtube.com/vi/1QzTz00m6_8/0.jpg?)](https://www.youtube.com/watch?v=1QzTz00m6_8)
+[![Video](https://img.youtube.com/vi/q80CG1LTqaY/0.jpg?)](https://www.youtube.com/watch?v=q80CG1LTqaY)
 
 </details>
 
