@@ -1,6 +1,17 @@
 # 🐍 SNEK 🐍
 
+<details open><summary> <h2>Introduction</h2> </summary></br>
+
 ![SNEK](assets/SNEK.jpg)
+
+I wanted to create a more fun version of the original snake.
+
+Backstory:
+I started playing with some game modes on the google snake game and found the one where the snake reverses when eating the fruit quite interesting. The difficulty of the project came from the limitations brought by the 8x8 matrix and it was fun trying to add features to the game without making the interface too cumbersome for the user and maintaining a good user experience.
+
+</details>
+
+
 
 <details open><summary> <h2>Game Description</h2> </summary></br>
 
@@ -13,6 +24,10 @@ The original snake rules apply, but now there are also levels of difficulty.
 * <b>Difficulty 1</b> - Now you are a fast boy.
 * <b>Difficulty 2</b> - Now every time you eat a fruit you get confused and the end of your tail becomes your new head.
 * <b>Difficulty 3</b> - Now you are both a fast and confused boy. Good luck!
+
+Controls: 
+* Use the joystick to change the direction of the snake.
+* By pressing on the joystick you can pause the game.
 
 You can select the starting difficulty from the menu and every 10 seconds the difficulty increases.
 
