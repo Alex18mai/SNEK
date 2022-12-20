@@ -6,7 +6,8 @@
 
 I wanted to create a more fun version of the original snake.
 
-Backstory:
+### Backstory:
+
 I started playing with some game modes on the google snake game and found the one where the snake reverses when eating the fruit quite interesting. The difficulty of the project came from the limitations brought by the 8x8 matrix and it was fun trying to add features to the game without making the interface too cumbersome for the user and maintaining a good user experience.
 
 </details>
