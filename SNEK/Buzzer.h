@@ -5,15 +5,32 @@
 
 #include "Memory.h"
 
-const int buzzer = 3,
-          buzzerSound = 700,
-          buzzerTime = 300;
+const int buzzer = 3;
+          
 
 void buzzerSetup() {
   pinMode(buzzer, OUTPUT);
 }
 
 void beep() {
+  static const int buzzerSound = 500,
+                   buzzerTime = 200;
+  if (soundSetting == WITH_SOUND) {
+    tone(buzzer, buzzerSound, buzzerTime);
+  }
+}
+
+void dyingSound() {
+  static const int buzzerSound = 200,
+                   buzzerTime = 1000;
+  if (soundSetting == WITH_SOUND) {
+    tone(buzzer, buzzerSound, buzzerTime);
+  }
+}
+
+void levelUpSound() {
+  static const int buzzerSound = 1000,
+                   buzzerTime = 700;
   if (soundSetting == WITH_SOUND) {
     tone(buzzer, buzzerSound, buzzerTime);
   }

@@ -26,13 +26,15 @@ struct position {
 const position initialSnek[] = { { 0, 2 }, { 0, 1 }, { 0, 0 } };
 position snek[matrixSize * matrixSize];
 
-const int initialSnekLenght = 3;
+const int initialSnekLenght = 3,
+          numberOfLifes = 1;
 
-const String difficultyText = "     Diff : ",
-             scoreText = "Score : ",
+const String scoreText = "SCORE : ",
              congratulations = "CONGRATULATIONS!",
              reachedDif = "Reached diff ",
-             newHighscoreText = "NEW HIGHSCORE!";
+             newHighscoreText = "NEW HIGHSCORE!",
+             space = " ",
+             levelText = "LVL";
 
 int snekX,
     snekY,
@@ -130,15 +132,23 @@ void updateGamePosition(int joystickMovement) {
 void changeGameLcd() {
   lcd.clear();
   lcd.setCursor(FIRST_ROW);
+  
+  lcd.write(LCD_SMILE);
+  lcd.print(space);
+  
   for (int i = 0; i < nameSize; i++) {
     lcd.print(currentName[i]);
   }
 
-  lcd.print(difficultyText);
+  lcd.print(space + space);
+  lcd.write(LCD_HEART);
+  lcd.print(numberOfLifes);
+  
+  lcd.print(space + space + levelText + space); 
   lcd.print(difficulty);
 
   lcd.setCursor(SECOND_ROW);
-  lcd.print(scoreText);
+  lcd.print(space + space + space + scoreText);
   lcd.print(score);
 
   if (pauseStart) {
@@ -159,7 +169,7 @@ void generateFood() {
       snekLength++;
       changedLength = true;
       if (diffConfig[difficulty].isReversed) {
-        // 0 snekLength - 2
+        // reverse snek
         for (int i = 0; i <= (snekLength - 2) / 2; i++) {
           position aux = snek[i];
           snek[i] = snek[snekLength - 2 - i];
@@ -221,6 +231,7 @@ void generateFood() {
 void displayGame() {
   // change difficulty
   if (millisWithoutPause() - lastDiffChange > diffChangeInterval) {
+    levelUpSound();
     lastDiffChange = millisWithoutPause();
     difficulty = min(difficulty + 1, MAX_DIFFICULTY);
     changeGameLcd();

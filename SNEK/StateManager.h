@@ -121,6 +121,7 @@ void manageCurrentState() {
         }
 
         if (snekEatsTail || !(snekX >= 0 && snekX < matrixSize && snekY >= 0 && snekY < matrixSize)) {
+          dyingSound();
           currentState = STATE_GAME_END;
           gameEndScreenChanged = true;
         }

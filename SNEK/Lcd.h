@@ -11,6 +11,8 @@
 #define LCD_ARROW_UP int(0)
 #define LCD_ARROW_DOWN int(1)
 #define LCD_PAUSE int(2)
+#define LCD_SMILE int(3)
+#define LCD_HEART int(4)
 
 #define ARROW_UP_POSITION 15, 0
 #define ARROW_DOWN_POSITION 15, 1
@@ -62,6 +64,28 @@ byte lcdPause[] = {
   B00000
 };
 
+byte lcdSmile[] = {
+  B00000,
+  B01010,
+  B01010,
+  B00000,
+  B10001,
+  B01110,
+  B00000,
+  B00000
+};
+
+byte lcdHeart[] = {
+  B00000,
+  B01010,
+  B10101,
+  B10001,
+  B01010,
+  B00100,
+  B00000,
+  B00000
+};
+
 void lcdSetup() {
   lcd.begin(16, 2);
   lcd.clear();
@@ -70,6 +94,8 @@ void lcdSetup() {
   lcd.createChar(LCD_ARROW_UP, lcdMaskArrowUp);
   lcd.createChar(LCD_ARROW_DOWN, lcdMaskArrowDown);
   lcd.createChar(LCD_PAUSE, lcdPause);
+  lcd.createChar(LCD_SMILE, lcdSmile);
+  lcd.createChar(LCD_HEART, lcdHeart);
 }
 
 #endif
