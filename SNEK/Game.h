@@ -1,3 +1,6 @@
+#ifndef SNEK_GAME_H // header guard
+#define SNEK_GAME_H
+
 /*
  * Game Module
  *
@@ -11,9 +14,6 @@
  *      -> generateFood() : generates a new food
  *  -> displayGameEnd() : called every time the game ends (displays info and updates highscores)
  */
-
-#ifndef SNEK_GAME_H // header guard
-#define SNEK_GAME_H
 
 #include "Matrix.h"
 #include "Lcd.h"

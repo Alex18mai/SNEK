@@ -1,12 +1,12 @@
+#ifndef SNEK_MENU_H // header guard
+#define SNEK_MENU_H
+
 /*
  * Menu Module
  *
  * Contains all the functions that display the menu on the lcd and matrix.
  * The putArrows function is universal and used in most of the display functions in order to put the up and down arrows.
  */
-
-#ifndef SNEK_MENU_H // header guard
-#define SNEK_MENU_H
 
 #include "Constants.h"
 #include "Matrix.h"

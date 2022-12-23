@@ -1,11 +1,11 @@
+#ifndef SNEK_TIME_H // header guard
+#define SNEK_TIME_H
+
 /*
  * Time (Pause) Module
  *
  * The module that takes care of the pause logic. The time spent in pause should not affect the game.
  */
-
-#ifndef SNEK_TIME_H // header guard
-#define SNEK_TIME_H
 
 unsigned long timePaused,
               pauseStart;

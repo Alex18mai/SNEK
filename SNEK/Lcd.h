@@ -1,11 +1,11 @@
+#ifndef SNEK_LCD_H // header guard
+#define SNEK_LCD_H
+
 /*
  * Lcd Module
  *
  * Contains the lcd, the setup and the custom chars.
  */
-
-#ifndef SNEK_LCD_H // header guard
-#define SNEK_LCD_H
 
 #include <LiquidCrystal.h>
 

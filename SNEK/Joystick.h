@@ -1,11 +1,11 @@
+#ifndef SNEK_JOYSTICK_H // header guard
+#define SNEK_JOYSTICK_H
+
 /*
  * Joystick Module
  *
  * Contains the functions for setting up the joystick and checking if the switch is pressed or if the joystick is moved.
  */
-
-#ifndef SNEK_JOYSTICK_H // header guard
-#define SNEK_JOYSTICK_H
 
 // joystick movement
 #define NONE 0

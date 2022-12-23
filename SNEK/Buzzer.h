@@ -1,11 +1,11 @@
+#ifndef SNEK_BUZZER_H // header guard
+#define SNEK_BUZZER_H
+
 /*
  * Buzzer Module
  *
  * Contains the setup and 3 functions for 3 different sounds used in the game and menu.
  */
-
-#ifndef SNEK_BUZZER_H // header guard
-#define SNEK_BUZZER_H
 
 #include "Memory.h"
 

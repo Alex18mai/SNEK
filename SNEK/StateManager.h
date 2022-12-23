@@ -1,3 +1,6 @@
+#ifndef SNEK_STATE_MANAGER_H // header guard
+#define SNEK_STATE_MANAGER_H
+
 /*
  * State Manager Module
  *
@@ -7,10 +10,7 @@
  *
  * The returnToMenu, returnToSettings and scrollItems functions were pieces of code that repeated a lot so I simplified the code with them as functions.
  */
-
-#ifndef SNEK_STATE_MANAGER_H // header guard
-#define SNEK_STATE_MANAGER_H
-
+ 
 #include "Menu.h"
 #include "Memory.h"
 #include "Joystick.h"
