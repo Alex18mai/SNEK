@@ -1,6 +1,10 @@
-// Constants
+/*
+ * Constants Module
+ *
+ * Contains the constants such as states, bounds and serial data rate.
+ */
 
-#ifndef SNEK_CONSTANTS_H
+#ifndef SNEK_CONSTANTS_H // header guard
 #define SNEK_CONSTANTS_H
 
 /* ---------- states ---------- */

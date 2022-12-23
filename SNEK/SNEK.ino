@@ -1,4 +1,8 @@
-// SNEK - Snake with a twist
+/*
+ * The main .ino file
+ *
+ * Calls all the setup functions for the modules and manages and executes the current state in a loop.
+ */
 
 #include "Constants.h"
 #include "Menu.h"
@@ -9,6 +13,7 @@
 #include "Game.h"
 #include "StateManager.h"
 #include "Buzzer.h"
+#include "Time.h"
 
 void setup() {
   memorySetup();

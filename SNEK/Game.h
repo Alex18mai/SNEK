@@ -1,6 +1,18 @@
-// Game
+/*
+ * Game Module
+ *
+ * Contains all the functions of the game:
+ *  -> gameSetup() : sets a random seed
+ *  -> gameInit() : called every time a game is started, just resets everything needed for the game
+ *  -> displayGame() : main game function, uses the following functions:
+ *      -> doGameMovement() : does the snake movement
+ *      -> updateGameDirection(int joystickMovement) : updates the direction based on the joystick input
+ *      -> changeGameLcd() : updates the lcd during the game
+ *      -> generateFood() : generates a new food
+ *  -> displayGameEnd() : called every time the game ends (displays info and updates highscores)
+ */
 
-#ifndef SNEK_GAME_H
+#ifndef SNEK_GAME_H // header guard
 #define SNEK_GAME_H
 
 #include "Matrix.h"
@@ -119,7 +131,7 @@ void doGameMovement() {
   }
 }
 
-void updateGamePosition(int joystickMovement) {
+void updateGameDirection(int joystickMovement) {
   if (joystickMovement != NONE) {
     if ((snekMovement == UP || snekMovement == DOWN) && (joystickMovement == LEFT || joystickMovement == RIGHT)) {
       snekMovement = joystickMovement;

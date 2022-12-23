@@ -1,6 +1,10 @@
-// Matrix
+/*
+ * Matrix Module
+ *
+ * Contains the matrix, the setup, the custom images and functions for updating tha matrix and displaying an image.
+ */
 
-#ifndef SNEK_MATRIX_H
+#ifndef SNEK_MATRIX_H // header guard
 #define SNEK_MATRIX_H
 
 #include <LedControl.h>

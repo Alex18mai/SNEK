@@ -1,6 +1,14 @@
-// State Manager
+/*
+ * State Manager Module
+ *
+ * The module that contains the 2 functions from the loop of the .ino file:
+ *  -> manageCurrentState() : gets the joystick and switch input and changes the current state based on them.
+ *  -> executeCurrentState() : executes the current state (displays what is needed)
+ *
+ * The returnToMenu, returnToSettings and scrollItems functions were pieces of code that repeated a lot so I simplified the code with them as functions.
+ */
 
-#ifndef SNEK_STATE_MANAGER_H
+#ifndef SNEK_STATE_MANAGER_H // header guard
 #define SNEK_STATE_MANAGER_H
 
 #include "Menu.h"
@@ -111,7 +119,7 @@ void manageCurrentState() {
           startPause();
           changeGameLcd();
         }
-        updateGamePosition(joystickMovement);
+        updateGameDirection(joystickMovement);
 
         bool snekEatsTail = false;
         for (int i = 1; i < snekLength; i++) {

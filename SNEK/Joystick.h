@@ -1,6 +1,10 @@
-// Joystick
+/*
+ * Joystick Module
+ *
+ * Contains the functions for setting up the joystick and checking if the switch is pressed or if the joystick is moved.
+ */
 
-#ifndef SNEK_JOYSTICK_H
+#ifndef SNEK_JOYSTICK_H // header guard
 #define SNEK_JOYSTICK_H
 
 // joystick movement
@@ -33,7 +37,7 @@ void joystickSetup() {
   pinMode(pinSW, INPUT_PULLUP);
 }
 
-// function that checks if the switch is pressed using debounce + checks if the switch is pressed for a long time
+// function that checks if the switch is pressed using debounce
 int checkSwitchAction() {
   static int lastSwitchValue = HIGH, switchState = HIGH;
   static unsigned long lastSwitchDebounceTime = 0;

@@ -1,6 +1,10 @@
-// Memory - EEPROM
+/*
+ * Memory (EEPROM) Module
+ *
+ * Contains the functions to initialize, read and save the highscores and settings.
+ */
 
-#ifndef SNEK_MEMORY_H
+#ifndef SNEK_MEMORY_H // header guard
 #define SNEK_MEMORY_H
 
 #include <EEPROM.h>
